@@ -6,6 +6,9 @@ import javax.swing.*;
 import javax.swing.text.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 public class ChatbotGPT {
@@ -13,6 +16,7 @@ public class ChatbotGPT {
     private static JTextPane chatArea;
     private static JTextField inputField;
     private static JButton sendButton;
+    private static JButton saveButton; // Nouveau bouton pour sauvegarder l'historique
     private static JFrame frame;
     private static StringBuilder conversationHistory = new StringBuilder();
     private static JLabel loadingLabel;
@@ -117,6 +121,32 @@ public class ChatbotGPT {
         sendButton.setFocusPainted(false);
         sendButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
+        // Nouveau bouton pour sauvegarder l'historique
+        saveButton = new JButton("Sauvegarder l'historique") {
+            {
+                setContentAreaFilled(false);
+                setOpaque(true);
+            }
+
+            @Override
+            protected void paintComponent(Graphics g) {
+                if (getModel().isPressed()) {
+                    g.setColor(BUTTON_HOVER_COLOR);
+                } else if (getModel().isRollover()) {
+                    g.setColor(BUTTON_HOVER_COLOR);
+                } else {
+                    g.setColor(PRIMARY_COLOR);
+                }
+                g.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
+                super.paintComponent(g);
+            }
+        };
+        saveButton.setForeground(BUTTON_TEXT_COLOR);
+        saveButton.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+        saveButton.setFocusPainted(false);
+        saveButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        saveButton.addActionListener(e -> saveConversationHistory());
+
         JButton newChatButton = new JButton("Nouvelle Conversation") {
             {
                 setContentAreaFilled(false);
@@ -161,6 +191,7 @@ public class ChatbotGPT {
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         buttonPanel.add(newChatButton);
+        buttonPanel.add(saveButton); // Ajouter le bouton de sauvegarde
 
         // Panel pour la zone de saisie avec un layout moderne
         JPanel inputPanel = new JPanel(new BorderLayout(10, 0));
@@ -207,6 +238,19 @@ public class ChatbotGPT {
         // Afficher la fenêtre
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+    }
+
+    // Méthode pour sauvegarder l'historique des conversations
+    private static void saveConversationHistory() {
+        try {
+            File file = new File(System.getProperty("user.home") + "/Desktop/conversation_history.txt");
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+            writer.write(conversationHistory.toString());
+            writer.close();
+            appendToChatArea("Historique des conversations sauvegardé avec succès.\n", STYLE_SYSTEM);
+        } catch (IOException e) {
+            appendToChatArea("Erreur lors de la sauvegarde de l'historique : " + e.getMessage() + "\n", STYLE_SYSTEM);
+        }
     }
 
     // Classe pour la barre de défilement moderne
