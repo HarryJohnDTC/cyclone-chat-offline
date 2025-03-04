@@ -251,18 +251,7 @@ saveButton.addActionListener(e -> {
         frame.setVisible(true);
     }
 
-    // Méthode pour sauvegarder l'historique des conversations
-    private static void saveConversationHistory() {
-        try {
-            File file = new File(System.getProperty("user.home") + "/Desktop/conversation_history.txt");
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-            writer.write(conversationHistory.toString());
-            writer.close();
-            appendToChatArea("Historique des conversations sauvegardé avec succès.\n", STYLE_SYSTEM);
-        } catch (IOException e) {
-            appendToChatArea("Erreur lors de la sauvegarde de l'historique : " + e.getMessage() + "\n", STYLE_SYSTEM);
-        }
-    }
+
 
     // Classe pour la barre de défilement moderne
     private static class ModernScrollBarUI extends BasicScrollBarUI {
