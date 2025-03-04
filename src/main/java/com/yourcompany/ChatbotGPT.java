@@ -3,6 +3,8 @@ package com.yourcompany;
 import okhttp3.*;
 import org.json.JSONObject;
 import javax.swing.*;
+import com.yourcompany.utils.FileUtils; // Importing FileUtils for saving conversation history
+
 import javax.swing.text.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
@@ -145,7 +147,16 @@ public class ChatbotGPT {
         saveButton.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
         saveButton.setFocusPainted(false);
         saveButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        saveButton.addActionListener(e -> saveConversationHistory());
+saveButton.addActionListener(e -> {
+    if (conversationHistory.length() == 0) {
+        appendToChatArea("Aucun historique à sauvegarder.\n", STYLE_SYSTEM);
+    } else {
+        FileUtils.saveConversationHistory(conversationHistory.toString());
+        appendToChatArea("Historique des conversations sauvegardé.\n", STYLE_SYSTEM);
+    }
+});
+
+
 
         JButton newChatButton = new JButton("Nouvelle Conversation") {
             {
