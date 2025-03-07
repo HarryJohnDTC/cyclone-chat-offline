@@ -302,7 +302,7 @@ saveButton.addActionListener(e -> {
         chatArea.setText("");
         conversationHistory = new StringBuilder();
         appendToChatArea("Nouvelle conversation démarrée.\n", STYLE_SYSTEM);
-        appendToChatArea("Expert cyclones à votre service. En cas d'urgence : 118\n\n", STYLE_SYSTEM);
+        appendToChatArea("Expert cyclones à votre service. En cas d'urgence : 118\nMétéo Madagascar : https://www.meteomadagascar.mg/\n\n", STYLE_SYSTEM);
         inputField.setText("");
         inputField.requestFocus();
     }
@@ -335,7 +335,9 @@ saveButton.addActionListener(e -> {
     private static void testConnection() {
         try {
             getChatbotResponse("test");
-            appendToChatArea("Connexion établie. Expert cyclones prêt. Urgence : 118\n\n", STYLE_SYSTEM);
+            appendToChatArea("Connexion établie. Expert cyclones prêt. Urgence : 118\n" + //
+                                "Météo Madagascar : https://www.meteomadagascar.mg/"+ //
+                                "\n", STYLE_SYSTEM);
         } catch (IOException e) {
             appendToChatArea("Tentative de démarrage d'Ollama...\n", STYLE_SYSTEM);
             startOllama();
